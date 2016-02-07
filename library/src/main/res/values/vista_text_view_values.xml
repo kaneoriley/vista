@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Styleables -->
+
+    <declare-styleable name="VistaTextView">
+        <attr name="vistaFont" format="string"/>
+    </declare-styleable>
+
+</resources>
