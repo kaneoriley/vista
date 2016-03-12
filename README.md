@@ -18,6 +18,6 @@ repositories {
 
 ```gradle
 dependencies {
-    compile 'me.oriley:vista:0.1'
+    compile 'me.oriley:vista:0.2'
 }
 ```
