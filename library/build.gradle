@@ -21,10 +21,10 @@ android {
 
 dependencies {
     // Support Libraries
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:support-annotations:23.1.1'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:support-annotations:23.2.0'
     compile 'javax.annotation:javax.annotation-api:1.2'
 
     // Lombok
-    provided 'org.projectlombok:lombok:1.16.6'
+    provided 'org.projectlombok:lombok:1.16.8'
 }
