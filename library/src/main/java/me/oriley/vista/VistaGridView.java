@@ -14,32 +14,31 @@
  *  limitations under the License.
  */
 
-package me.oriley.vista.scrollviews;
+package me.oriley.vista;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.Nullable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.view.View;
 
 import android.widget.AbsListView;
 import android.widget.GridView;
-import lombok.NonNull;
-import lombok.experimental.Delegate;
+import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class VistaGridView extends GridView implements CustomEdgeEffectHost {
+public class VistaGridView extends GridView implements VistaEdgeEffectHost {
 
     private static final String TOP_EDGE = "mEdgeGlowTop";
     private static final String BOTTOM_EDGE = "mEdgeGlowBottom";
 
-    @Delegate
     @NonNull
-    private final EdgeEffects mEdgeEffects;
+    private final VistaEdgeEffectHelper mEdgeEffects;
+
 
     public VistaGridView(Context context) {
         this(context, null);
@@ -51,29 +50,32 @@ public class VistaGridView extends GridView implements CustomEdgeEffectHost {
 
     public VistaGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mEdgeEffects = EdgeEffects.get(AbsListView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public VistaGridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mEdgeEffects = EdgeEffects.get(AbsListView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context);
     }
 
-    @Nullable
-    public View getViewByPosition(int position) {
-        int firstPosition = this.getFirstVisiblePosition();
-        int lastPosition = this.getLastVisiblePosition();
-        if ((position < firstPosition) || (position > lastPosition)) return null;
-        return getChildAt(position - firstPosition);
-    }
 
     @NonNull
     @Override
-    public final List<EdgeEffectModel> getEdgeEffectModels() {
-        List<EdgeEffectModel> models = new ArrayList<>();
-        models.add(new EdgeEffectModel(TOP_EDGE, EdgeEffects.Side.TOP, false));
-        models.add(new EdgeEffectModel(BOTTOM_EDGE, EdgeEffects.Side.BOTTOM, false));
+    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
+        List<VistaEdgeEffectModel> models = new ArrayList<>();
+        models.add(new VistaEdgeEffectModel(TOP_EDGE, Side.TOP, false));
+        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, Side.BOTTOM, false));
         return models;
+    }
+
+    @Override
+    public void setEdgeEffectColors(@ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColors(color);
+    }
+
+    @Override
+    public void setEdgeEffectColor(@NonNull Side side, @ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColor(side, color);
     }
 }

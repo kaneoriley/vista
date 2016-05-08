@@ -14,27 +14,27 @@
  *  limitations under the License.
  */
 
-package me.oriley.vista.scrollviews;
+package me.oriley.vista;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-
-import lombok.NonNull;
-import lombok.experimental.Delegate;
+import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class VistaNestedScrollView extends NestedScrollView implements CustomEdgeEffectHost {
+public class VistaNestedScrollView extends NestedScrollView implements VistaEdgeEffectHost {
 
     private static final String TOP_EDGE = "mEdgeGlowTop";
     private static final String BOTTOM_EDGE = "mEdgeGlowBottom";
 
-    @Delegate
     @NonNull
-    private final EdgeEffects mEdgeEffects;
+    private final VistaEdgeEffectHelper mEdgeEffects;
+
 
     public VistaNestedScrollView(Context context) {
         this(context, null);
@@ -46,15 +46,26 @@ public class VistaNestedScrollView extends NestedScrollView implements CustomEdg
 
     public VistaNestedScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mEdgeEffects = EdgeEffects.get(NestedScrollView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(NestedScrollView.class, this, context);
     }
+
 
     @NonNull
     @Override
-    public final List<EdgeEffectModel> getEdgeEffectModels() {
-        List<EdgeEffectModel> models = new ArrayList<>();
-        models.add(new EdgeEffectModel(TOP_EDGE, EdgeEffects.Side.TOP, true));
-        models.add(new EdgeEffectModel(BOTTOM_EDGE, EdgeEffects.Side.BOTTOM, true));
+    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
+        List<VistaEdgeEffectModel> models = new ArrayList<>();
+        models.add(new VistaEdgeEffectModel(TOP_EDGE, Side.TOP, true));
+        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, Side.BOTTOM, true));
         return models;
+    }
+
+    @Override
+    public void setEdgeEffectColors(@ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColors(color);
+    }
+
+    @Override
+    public void setEdgeEffectColor(@NonNull Side side, @ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColor(side, color);
     }
 }

@@ -14,26 +14,27 @@
  *  limitations under the License.
  */
 
-package me.oriley.vista.scrollviews;
+package me.oriley.vista;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import lombok.NonNull;
-import lombok.experimental.Delegate;
+import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class VistaViewPager extends ViewPager implements CustomEdgeEffectHost {
+public class VistaViewPager extends ViewPager implements VistaEdgeEffectHost {
 
     private static final String LEFT_EDGE = "mLeftEdge";
     private static final String RIGHT_EDGE = "mRightEdge";
 
-    @Delegate
     @NonNull
-    private final EdgeEffects mEdgeEffects;
+    private final VistaEdgeEffectHelper mEdgeEffects;
+
 
     public VistaViewPager(Context context) {
         this(context, null);
@@ -41,15 +42,26 @@ public class VistaViewPager extends ViewPager implements CustomEdgeEffectHost {
 
     public VistaViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mEdgeEffects = EdgeEffects.get(ViewPager.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(ViewPager.class, this, context);
     }
+
 
     @NonNull
     @Override
-    public final List<EdgeEffectModel> getEdgeEffectModels() {
-        List<EdgeEffectModel> models = new ArrayList<>();
-        models.add(new EdgeEffectModel(LEFT_EDGE, EdgeEffects.Side.LEFT, true));
-        models.add(new EdgeEffectModel(RIGHT_EDGE, EdgeEffects.Side.RIGHT, true));
+    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
+        List<VistaEdgeEffectModel> models = new ArrayList<>();
+        models.add(new VistaEdgeEffectModel(LEFT_EDGE, Side.LEFT, true));
+        models.add(new VistaEdgeEffectModel(RIGHT_EDGE, Side.RIGHT, true));
         return models;
+    }
+
+    @Override
+    public void setEdgeEffectColors(@ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColors(color);
+    }
+
+    @Override
+    public void setEdgeEffectColor(@NonNull Side side, @ColorInt int color) {
+        mEdgeEffects.setEdgeEffectColor(side, color);
     }
 }
