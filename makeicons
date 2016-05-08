@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# Helper script to generate icons and logos
+#
+
+# Usage: inkscape_export inputFile outputFile size
+inkscape_export () {
+  # TODO: Check parameters
+  echo "    - $2 (${3}px)"
+
+  outputDir=$(dirname $2)
+  if [ ! -d ${outputDir} ]; then
+    mkdir -p ${outputDir}
+  fi
+
+  inkscape --export-png $2 -w $3 $1 &> /dev/null
+}
+
+CURRENTDIR=$PWD
+SCRIPT="${BASH_SOURCE[0]}"
+while [ -h "$SCRIPT" ]; do
+  SCRIPTPATH="$( cd -P "$( dirname "$SCRIPT" )" && pwd )"
+  SCRIPT="$(readlink "$SCRIPT")"
+  [[ $SCRIPT != /* ]] && SOURCE="$SCRIPTPATH/$SCRIPT"
+done
+SCRIPTPATH="$( cd -P "$( dirname "$SCRIPT" )" && pwd )"
+cd "$PWD"
+
+# TODO: Object array?
+declare -a sourceFiles=("icon.svg" "icon-debug.svg" "icon.svg" "icon-debug.svg" "brand.svg")
+declare -a targetFiles=("ic_launcher.png" "ic_launcher2.png" "splash_logo.png" "splash_logo2.png" "splash_brand.png")
+declare -a targetDirs=("mipmap" "mipmap" "drawable" "drawable" "drawable")
+
+# All densities we are interested in
+declare -a densities=("xxxhdpi" "xxhdpi" "xhdpi" "hdpi" "mdpi")
+declare -a targetFileSizes=("192 144 96 72 48" "192 144 96 72 48" "640 480 320 240 160" "640 480 320 240 160" "896 672 448 336 224")
+
+targetFilesCount=${#targetFiles[@]}
+
+echo ""
+echo "[#] Exporting high quality icon for Play Store..."
+inkscape_export ${CURRENTDIR}/artwork/icon.svg ${CURRENTDIR}/icon.png 512
+
+echo "[#] Generating resources..."
+for (( i = 0; i < ${targetFilesCount}; i++ )); do
+  sourceFile="${sourceFiles[$i]}"
+  targetFile="${targetFiles[$i]}"
+  targetDir="${targetDirs[$i]}"
+
+  sizeArray=(${targetFileSizes[$i]})
+  for (( j = 0; j < ${#sizeArray[@]}; j++ )); do
+    density=${densities[$j]}
+    size=${sizeArray[j]}
+    fileName=${CURRENTDIR}/app/src/main/res/${targetDir}-${density}/${targetFile}
+    inkscape_export ${CURRENTDIR}/artwork/${sourceFile} ${fileName} ${size}
+  done
+done
+
+echo "[i] Finished"
+echo ""
+
+exit 0

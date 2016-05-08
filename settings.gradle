@@ -1,1 +1,5 @@
-include ':library'
+include ':vista-library'
+
+if (!"true".equals(System.getenv("TRAVIS")) && !"true".equals(System.getenv("JITPACK"))) {
+    include ':vista-sample'
+}
