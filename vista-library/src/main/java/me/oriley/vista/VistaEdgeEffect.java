@@ -31,7 +31,7 @@ import android.widget.EdgeEffect;
  * 1) It does not use PorterDuffXfermode
  * 2) The width to radius factor is smaller (0.5 instead of 0.75)
  */
-public class VistaEdgeEffect extends EdgeEffect {
+class VistaEdgeEffect extends EdgeEffect {
 
     // Time it will take the effect to fully recede in ms
     private static final int RECEDE_TIME = 600;
@@ -78,7 +78,7 @@ public class VistaEdgeEffect extends EdgeEffect {
     /**
      * Construct a new EdgeEffect with a theme appropriate for the provided context.
      */
-    public VistaEdgeEffect(@NonNull Context context) {
+    VistaEdgeEffect(@NonNull Context context) {
         super(context);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);

@@ -15,6 +15,7 @@ import android.view.View;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+@SuppressWarnings("WeakerAccess")
 public final class VistaEdgeEffectHelper {
 
     public enum Side {
@@ -34,6 +35,8 @@ public final class VistaEdgeEffectHelper {
     @NonNull
     private final HashMap<Side, VistaEdgeEffect> mEdges = new HashMap<>();
 
+    private final int mInitialGlowColour;
+
 
     public VistaEdgeEffectHelper(@NonNull Class<? extends View> viewClass,
                                  @NonNull VistaEdgeEffectHost customEdgeEffectHost,
@@ -41,15 +44,7 @@ public final class VistaEdgeEffectHelper {
                                  @Nullable AttributeSet attrs) {
         mViewClass = viewClass;
         mHost = customEdgeEffectHost;
-
-        int initialColor = readColorAttribute(context, attrs);
-        for (VistaEdgeEffectModel model : mHost.getEdgeEffectModels()) {
-            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context);
-            edgeEffect.setColor(initialColor);
-            if (replaceEdgeEffect(context, model.fieldName, edgeEffect, model.isCompat)) {
-                mEdges.put(model.side, edgeEffect);
-            }
-        }
+        mInitialGlowColour = readColorAttribute(context, attrs);
     }
 
 
@@ -73,6 +68,18 @@ public final class VistaEdgeEffectHelper {
         }
 
         return initialColor;
+    }
+
+    public void refreshEdges() {
+        Context context = mHost.getContext();
+        mEdges.clear();
+        for (VistaEdgeEffectModel model : mHost.getEdgeEffectModels()) {
+            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context);
+            edgeEffect.setColor(mInitialGlowColour);
+            if (replaceEdgeEffect(context, model.fieldName, edgeEffect, model.isCompat)) {
+                mEdges.put(model.side, edgeEffect);
+            }
+        }
     }
 
     @CheckResult
@@ -101,9 +108,12 @@ public final class VistaEdgeEffectHelper {
             edgeEffectField.set(edgeEffectCompat, edgeEffect);
 
             edgeEffectCompatField.set(mHost, edgeEffectCompat);
+
+            edgeEffectCompat.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
+            Log.d(TAG, "Replaced edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error replacing edge effect " + fieldName + " in class " + mViewClass);
+            Log.e(TAG, "Error replacing edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
             e.printStackTrace();
             return false;
         }
@@ -116,9 +126,12 @@ public final class VistaEdgeEffectHelper {
             Field field = mViewClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(mHost, edgeEffect);
+
+            edgeEffect.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
+            Log.d(TAG, "Replaced edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error replacing edge effect " + fieldName + " in class " + mViewClass);
+            Log.e(TAG, "Error replacing edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
             e.printStackTrace();
             return false;
         }

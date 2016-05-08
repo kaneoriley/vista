@@ -78,4 +78,10 @@ public class VistaGridView extends GridView implements VistaEdgeEffectHost {
     public void setEdgeEffectColor(@NonNull Side side, @ColorInt int color) {
         mEdgeEffects.setEdgeEffectColor(side, color);
     }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mEdgeEffects.refreshEdges();
+    }
 }
