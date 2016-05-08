@@ -72,4 +72,9 @@ dependencies {
 }
 ```
 
-TODO: Upload a sample app (in progress)
+If you would like to check out the latest development version, please substitute all versions for `develop-SNAPSHOT`.
+Keep in mind that it is very likely things could break or be unfinished, so stick the official releases if you want
+things to be more predictable.
+
+Please checkout the sample application to familiarise yourself with the implementation details. Don't be afraid to
+make an issue or contact me if you have any problems or feature suggestions.

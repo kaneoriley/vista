@@ -1,12 +1,15 @@
-.gradle
-/local.properties
-.DS_Store
+#
+# Gradle/IntelliJ stuff
+#
+.gradle/
+.idea/
 build/
-/captures
+./captures/
+*.apk
 
-# IDEA
-.idea/workspace.xml
-.idea/libraries
-.idea/modules.xml
-.idea/shelf
+#
+# Local Configuration
+#
+./workspace/
 *.iml
+local.properties

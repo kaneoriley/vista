@@ -1,0 +1,27 @@
+<resources>
+
+    <string name="app_name">Vista Sample</string>
+    <string name="developer_name">Kane O\'Riley</string>
+    <string name="developer_email">kane@oriley.me</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="navigation_drawer_grid_view">GridView</string>
+    <string name="navigation_drawer_list_view">ListView</string>
+    <string name="navigation_drawer_scroll_view">ScrollView</string>
+    <string name="navigation_drawer_recycler_view">RecyclerView</string>
+    <string name="navigation_drawer_nested_scroll_view">NestedScrollView</string>
+    <string name="navigation_drawer_view_pager">ViewPager</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse facilisis magna vitae turpis sodales, vel auctor mauris efficitur. Mauris sagittis orci in enim bibendum lacinia. Phasellus convallis a urna vel semper. Mauris dictum in mauris eu laoreet. Integer at nunc magna. Quisque vulputate pharetra justo ut auctor. Ut nulla quam, euismod a urna id, blandit ornare nisi. Praesent bibendum, nisl et placerat bibendum, purus enim pharetra metus, ac egestas tortor dui ut magna. In vitae sem ac mauris elementum fermentum sed eu leo. Nulla purus mi, lobortis non lacus quis, luctus gravida nunc. Etiam ultricies erat sed velit rhoncus viverra. Cras vitae efficitur mauris. Nullam sit amet nisl posuere, maximus ligula sed, dignissim est.
+
+        Nullam iaculis mi non dolor placerat tempus. Pellentesque lobortis, ex ac euismod pellentesque, lorem lacus convallis nisl, sit amet viverra dolor lorem vel magna. Cras pharetra viverra nulla, eu tristique eros laoreet eget. Sed eu turpis dignissim, maximus lorem eget, congue ligula. Praesent vitae orci auctor, facilisis mauris sit amet, condimentum odio. Proin facilisis auctor lacus et efficitur. Quisque laoreet enim et purus molestie, et fermentum tellus pretium. Quisque fringilla lacinia enim non rutrum. Nullam aliquet erat non est finibus, eu venenatis justo pellentesque. Fusce faucibus semper elementum. Phasellus sagittis lacinia lacus, sit amet pulvinar ex porta non. Praesent in magna vel nibh tempor dignissim nec eget diam. Phasellus accumsan enim quis sem condimentum dapibus. Nullam eleifend elit vel felis hendrerit, bibendum condimentum tellus viverra. Aliquam accumsan magna volutpat erat auctor porta.
+
+        Aliquam efficitur ipsum at blandit gravida. Praesent euismod accumsan cursus. Praesent eu diam ligula. Quisque et elit finibus, vehicula mauris id, gravida odio. Maecenas vehicula nisl lectus, vel commodo mi luctus in. Etiam laoreet porttitor eros vel hendrerit. Nam ultricies libero at dui gravida, id sollicitudin est pellentesque. Donec pretium, arcu eget sollicitudin condimentum, odio sapien pulvinar risus, eu vestibulum lectus orci vitae augue.
+
+        Quisque quis arcu condimentum, tincidunt ligula aliquam, egestas massa. Fusce vulputate eget nunc quis tempus. Morbi vel sapien non turpis molestie rutrum quis in ante. Praesent velit mi, faucibus ut luctus et, finibus a diam. Sed suscipit tincidunt tellus, a scelerisque ligula ullamcorper sit amet. Curabitur efficitur augue sit amet nibh fermentum vestibulum. Curabitur ac mi euismod, pulvinar orci id, imperdiet lectus. Nunc quis quam accumsan, vulputate velit sit amet, malesuada justo. Donec lacus libero, aliquet malesuada augue sed, consectetur aliquam nulla. Maecenas egestas mollis hendrerit. Praesent bibendum, justo malesuada fringilla sodales, dui magna ornare leo, in rutrum mauris erat at tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vel volutpat felis. Sed a justo ac nulla molestie tincidunt euismod eget libero.
+
+        Suspendisse et tempus nibh, et accumsan velit. Etiam malesuada, tortor vitae efficitur auctor, ligula mauris suscipit dolor, et sodales ex sapien a enim. Mauris eu consectetur felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porttitor odio ac augue accumsan ornare. Nam luctus nunc non posuere facilisis. Sed congue posuere sem. Donec gravida facilisis aliquam. Morbi commodo faucibus gravida. In hac habitasse platea dictumst. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus lectus eros, placerat sit amet lobortis a, vehicula nec tellus. Fusce tempus auctor consequat. Cras ut libero at risus varius consequat. Morbi accumsan libero nisi, in laoreet est pretium ac.</string>
+
+</resources>
