@@ -42,7 +42,7 @@ public class VistaViewPager extends ViewPager implements VistaEdgeEffectHost {
 
     public VistaViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mEdgeEffects = new VistaEdgeEffectHelper(ViewPager.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(ViewPager.class, this, context, attrs);
     }
 
 

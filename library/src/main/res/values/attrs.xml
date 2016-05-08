@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Styleables -->
+
+    <declare-styleable name="VistaView">
+        <attr name="vistaEdgeEffectColor" format="color"/>
+    </declare-styleable>
+
+</resources>

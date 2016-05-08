@@ -50,13 +50,13 @@ public class VistaGridView extends GridView implements VistaEdgeEffectHost {
 
     public VistaGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public VistaGridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
     }
 
 

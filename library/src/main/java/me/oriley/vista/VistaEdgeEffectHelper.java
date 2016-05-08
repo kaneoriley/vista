@@ -1,11 +1,15 @@
 package me.oriley.vista;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.EdgeEffectCompat;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 
 import java.lang.reflect.Field;
@@ -18,8 +22,8 @@ public final class VistaEdgeEffectHelper {
     }
 
     private static final String TAG = VistaEdgeEffectHelper.class.getSimpleName();
-
     private static final String COMPAT_EDGE_EFFECT = "mEdgeEffect";
+    private static final int INVALID = -1;
 
     @NonNull
     private final Class<? extends View> mViewClass;
@@ -33,18 +37,43 @@ public final class VistaEdgeEffectHelper {
 
     public VistaEdgeEffectHelper(@NonNull Class<? extends View> viewClass,
                                  @NonNull VistaEdgeEffectHost customEdgeEffectHost,
-                                 @NonNull Context context) {
+                                 @NonNull Context context,
+                                 @Nullable AttributeSet attrs) {
         mViewClass = viewClass;
         mHost = customEdgeEffectHost;
 
+        int initialColor = readColorAttribute(context, attrs);
         for (VistaEdgeEffectModel model : mHost.getEdgeEffectModels()) {
             VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context);
+            edgeEffect.setColor(initialColor);
             if (replaceEdgeEffect(context, model.fieldName, edgeEffect, model.isCompat)) {
                 mEdges.put(model.side, edgeEffect);
             }
         }
     }
 
+
+    @ColorInt
+    private int readColorAttribute(@NonNull Context context, @Nullable AttributeSet attrs) {
+        int initialColor = INVALID;
+        if (attrs != null) {
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VistaView);
+            if (a.hasValue(R.styleable.VistaView_vistaEdgeEffectColor)) {
+                initialColor = a.getColor(R.styleable.VistaView_vistaEdgeEffectColor, INVALID);
+            }
+            a.recycle();
+        }
+
+        // Couldn't get from attribute, try app compat accent color
+        if (initialColor == INVALID) {
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+            initialColor = a.getColor(0, 0);
+            a.recycle();
+        }
+
+        return initialColor;
+    }
 
     @CheckResult
     private boolean replaceEdgeEffect(@NonNull Context context,

@@ -33,7 +33,7 @@ public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHo
 
     public VistaRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mEdgeEffects = new VistaEdgeEffectHelper(RecyclerView.class, this, context);
+        mEdgeEffects = new VistaEdgeEffectHelper(RecyclerView.class, this, context, attrs);
     }
 
 
