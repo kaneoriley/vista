@@ -3,11 +3,60 @@
 # Vista
 ![Logo](artwork/icon.png)
 
-TODO: Actual README
+Vista is a simple library that allows using Material design style edge effects on all Android devices running 4.0+. It
+is ported from the Android Launcher source code, which means you also have the added benefit of the edges not appearing
+to be cut off, which is much nicer in my honest opinion.
 
-# Gradle Dependency
 
-1. Add JitPack.io to your repositories list in the root projects build.gradle:
+## Usage
+
+
+Vista supports 6 view types. You need to replace the view in your layout XML with the corresponding Vista version in
+order to see the new edge effects. The following are the names of the supported types, and their corresponding Vista
+counterparts:
+
+`android.widget.GridView`: Replace with `me.oriley.vista.VistaGridView`
+`android.widget.ListView`: Replace with `me.oriley.vista.VistaListView`
+`android.widget.ScrollView`: Replace with `me.oriley.vista.VistaScrollView`
+`android.support.v4.view.ViewPager`: Replace with `me.oriley.vista.VistaViewPager`
+`android.support.v4.widget.NestedScrollView`: Replace with `me.oriley.vista.VistaNestedScrollView`
+`android.support.v7.widget.RecyclerView`: Replace with `me.oriley.vista.VistaRecyclerView`
+
+So, your XML will look something like this:
+
+```xml
+    ...
+
+    <me.oriley.vista.VistaViewPager
+        android:id="@+id/vista_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    ...
+```
+
+To customise the edge effect colour, add the `vistaEdgeEffectColor` attribute like so:
+
+```xml
+    ...
+
+    <me.oriley.vista.VistaViewPager
+        android:id="@+id/vista_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:vistaEdgeEffectColor="@color/my_edge_effect_color"/>
+
+    ...
+```
+
+And that's it! You now have Material Design edge effect glows available to many more users, and don't have the ugly
+cut-off arc when your views aren't filling the available space.
+
+
+## Gradle Dependency
+
+
+ * Add JitPack.io repo to your buildscript:
 
 ```gradle
 repositories {
@@ -15,10 +64,12 @@ repositories {
 }
 ```
 
-2. Add the following to your module dependencies:
+ * Add the library to your module dependencies:
 
 ```gradle
 dependencies {
-    compile 'me.oriley:vista:0.2'
+    compile 'me.oriley:vista:0.3'
 }
 ```
+
+TODO: Upload a sample app (in progress)
