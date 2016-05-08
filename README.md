@@ -68,7 +68,7 @@ repositories {
 
 ```gradle
 dependencies {
-    compile 'me.oriley:vista:0.3.0'
+    compile 'com.github.oriley-me:vista:0.3.0'
 }
 ```
 
