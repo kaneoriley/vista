@@ -8,14 +8,24 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
+import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
+@SuppressWarnings("unused")
 public class VistaScrollView extends ScrollView implements VistaEdgeEffectHost {
 
-    private static final String TOP_EDGE = "mEdgeGlowTop";
-    private static final String BOTTOM_EDGE = "mEdgeGlowBottom";
+    private static final Map<Side, Field> FIELD_MAP;
+
+    static {
+        Map<Side, Field> map = new HashMap<>();
+
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, ScrollView.class, Side.TOP, "mEdgeGlowTop");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, ScrollView.class, Side.BOTTOM, "mEdgeGlowBottom");
+
+        FIELD_MAP = Collections.unmodifiableMap(map);
+    }
 
     @NonNull
     private final VistaEdgeEffectHelper mEdgeEffects;
@@ -41,28 +51,19 @@ public class VistaScrollView extends ScrollView implements VistaEdgeEffectHost {
     }
 
 
-    @NonNull
-    @Override
-    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
-        List<VistaEdgeEffectModel> models = new ArrayList<>();
-        models.add(new VistaEdgeEffectModel(TOP_EDGE, VistaEdgeEffectHelper.Side.TOP, false));
-        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, VistaEdgeEffectHelper.Side.BOTTOM, false));
-        return models;
-    }
-
     @Override
     public void setEdgeEffectColors(@ColorInt int color) {
         mEdgeEffects.setEdgeEffectColors(color);
     }
 
     @Override
-    public void setEdgeEffectColor(@NonNull VistaEdgeEffectHelper.Side side, @ColorInt int color) {
+    public void setEdgeEffectColor(@NonNull Side side, @ColorInt int color) {
         mEdgeEffects.setEdgeEffectColor(side, color);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges();
+        mEdgeEffects.refreshEdges(FIELD_MAP, false);
     }
 }

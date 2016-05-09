@@ -27,14 +27,22 @@ import android.widget.AbsListView;
 import android.widget.GridView;
 import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class VistaGridView extends GridView implements VistaEdgeEffectHost {
 
-    private static final String TOP_EDGE = "mEdgeGlowTop";
-    private static final String BOTTOM_EDGE = "mEdgeGlowBottom";
+    private static final Map<Side, Field> FIELD_MAP;
+
+    static {
+        Map<Side, Field> map = new HashMap<>();
+
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, AbsListView.class, Side.TOP, "mEdgeGlowTop");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, AbsListView.class, Side.BOTTOM, "mEdgeGlowBottom");
+
+        FIELD_MAP = Collections.unmodifiableMap(map);
+    }
 
     @NonNull
     private final VistaEdgeEffectHelper mEdgeEffects;
@@ -60,15 +68,6 @@ public class VistaGridView extends GridView implements VistaEdgeEffectHost {
     }
 
 
-    @NonNull
-    @Override
-    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
-        List<VistaEdgeEffectModel> models = new ArrayList<>();
-        models.add(new VistaEdgeEffectModel(TOP_EDGE, Side.TOP, false));
-        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, Side.BOTTOM, false));
-        return models;
-    }
-
     @Override
     public void setEdgeEffectColors(@ColorInt int color) {
         mEdgeEffects.setEdgeEffectColors(color);
@@ -82,6 +81,6 @@ public class VistaGridView extends GridView implements VistaEdgeEffectHost {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges();
+        mEdgeEffects.refreshEdges(FIELD_MAP, false);
     }
 }

@@ -23,14 +23,22 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class VistaViewPager extends ViewPager implements VistaEdgeEffectHost {
 
-    private static final String LEFT_EDGE = "mLeftEdge";
-    private static final String RIGHT_EDGE = "mRightEdge";
+    private static final Map<Side, Field> FIELD_MAP;
+
+    static {
+        Map<Side, Field> map = new HashMap<>();
+
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, ViewPager.class, Side.LEFT, "mLeftEdge");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, ViewPager.class, Side.RIGHT, "mRightEdge");
+
+        FIELD_MAP = Collections.unmodifiableMap(map);
+    }
 
     @NonNull
     private final VistaEdgeEffectHelper mEdgeEffects;
@@ -46,15 +54,6 @@ public class VistaViewPager extends ViewPager implements VistaEdgeEffectHost {
     }
 
 
-    @NonNull
-    @Override
-    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
-        List<VistaEdgeEffectModel> models = new ArrayList<>();
-        models.add(new VistaEdgeEffectModel(LEFT_EDGE, Side.LEFT, true));
-        models.add(new VistaEdgeEffectModel(RIGHT_EDGE, Side.RIGHT, true));
-        return models;
-    }
-
     @Override
     public void setEdgeEffectColors(@ColorInt int color) {
         mEdgeEffects.setEdgeEffectColors(color);
@@ -68,6 +67,6 @@ public class VistaViewPager extends ViewPager implements VistaEdgeEffectHost {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges();
+        mEdgeEffects.refreshEdges(FIELD_MAP, true);
     }
 }

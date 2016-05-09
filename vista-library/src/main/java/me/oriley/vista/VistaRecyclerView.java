@@ -8,16 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHost {
 
-    private static final String LEFT_EDGE = "mLeftGlow";
-    private static final String TOP_EDGE = "mTopGlow";
-    private static final String RIGHT_EDGE = "mRightGlow";
-    private static final String BOTTOM_EDGE = "mBottomGlow";
+    private static final Map<Side, Field> FIELD_MAP;
+
+    static {
+        Map<Side, Field> map = new HashMap<>();
+
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.TOP, "mTopGlow");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.LEFT, "mLeftGlow");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.RIGHT, "mRightGlow");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.BOTTOM, "mBottomGlow");
+
+        FIELD_MAP = Collections.unmodifiableMap(map);
+    }
 
     @NonNull
     private final VistaEdgeEffectHelper mEdgeEffects;
@@ -37,17 +45,6 @@ public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHo
     }
 
 
-    @NonNull
-    @Override
-    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
-        List<VistaEdgeEffectModel> models = new ArrayList<>();
-        models.add(new VistaEdgeEffectModel(LEFT_EDGE, Side.LEFT, true));
-        models.add(new VistaEdgeEffectModel(TOP_EDGE, Side.TOP, true));
-        models.add(new VistaEdgeEffectModel(RIGHT_EDGE, Side.RIGHT, true));
-        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, Side.BOTTOM, true));
-        return models;
-    }
-
     @Override
     public void setEdgeEffectColors(@ColorInt int color) {
         mEdgeEffects.setEdgeEffectColors(color);
@@ -61,6 +58,6 @@ public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHo
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges();
+        mEdgeEffects.refreshEdges(FIELD_MAP, true);
     }
 }
