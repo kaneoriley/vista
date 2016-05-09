@@ -1,5 +1,3 @@
-package me.oriley.vista;
-
 /*
  * Copyright (C) 2015 The Android Open Source Project
  *
@@ -15,6 +13,8 @@ package me.oriley.vista;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package me.oriley.vista;
 
 import android.content.Context;
 import android.graphics.Canvas;

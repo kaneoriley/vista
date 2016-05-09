@@ -17,6 +17,7 @@ counterparts:
 
 `android.widget.GridView`: Replace with `me.oriley.vista.VistaGridView`  
 `android.widget.ListView`: Replace with `me.oriley.vista.VistaListView`  
+`android.widget.HorizontalScrollView`: Replace with `me.oriley.vista.VistaHorizontalScrollView`  
 `android.widget.ScrollView`: Replace with `me.oriley.vista.VistaScrollView`  
 `android.support.v4.view.ViewPager`: Replace with `me.oriley.vista.VistaViewPager`  
 `android.support.v4.widget.NestedScrollView`: Replace with `me.oriley.vista.VistaNestedScrollView`  

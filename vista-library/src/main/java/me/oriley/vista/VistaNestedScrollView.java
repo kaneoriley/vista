@@ -54,7 +54,7 @@ public class VistaNestedScrollView extends NestedScrollView implements VistaEdge
 
     public VistaNestedScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mEdgeEffects = new VistaEdgeEffectHelper(NestedScrollView.class, this, context, attrs);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
 

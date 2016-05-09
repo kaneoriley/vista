@@ -57,13 +57,13 @@ public class VistaListView extends ListView implements VistaEdgeEffectHost {
 
     public VistaListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public VistaListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
 
