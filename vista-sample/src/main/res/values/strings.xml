@@ -8,11 +8,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="navigation_drawer_grid_view">GridView</string>
+    <string name="navigation_drawer_horizontal_scroll_view">HorizontalScrollView</string>
     <string name="navigation_drawer_list_view">ListView</string>
     <string name="navigation_drawer_scroll_view">ScrollView</string>
     <string name="navigation_drawer_recycler_view">RecyclerView</string>
     <string name="navigation_drawer_nested_scroll_view">NestedScrollView</string>
     <string name="navigation_drawer_view_pager">ViewPager</string>
+    <string name="navigation_drawer_custom_values">Something Different</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse facilisis magna vitae turpis sodales, vel auctor mauris efficitur. Mauris sagittis orci in enim bibendum lacinia. Phasellus convallis a urna vel semper. Mauris dictum in mauris eu laoreet. Integer at nunc magna. Quisque vulputate pharetra justo ut auctor. Ut nulla quam, euismod a urna id, blandit ornare nisi. Praesent bibendum, nisl et placerat bibendum, purus enim pharetra metus, ac egestas tortor dui ut magna. In vitae sem ac mauris elementum fermentum sed eu leo. Nulla purus mi, lobortis non lacus quis, luctus gravida nunc. Etiam ultricies erat sed velit rhoncus viverra. Cras vitae efficitur mauris. Nullam sit amet nisl posuere, maximus ligula sed, dignissim est.
 

@@ -16,29 +16,28 @@
 
 package me.oriley.vista;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.widget.HorizontalScrollView;
 import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 @SuppressWarnings("unused")
-public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHost {
+public class VistaHorizontalScrollView extends HorizontalScrollView implements VistaEdgeEffectHost {
 
     private static final Map<Side, Field> FIELD_MAP;
 
     static {
         Map<Side, Field> map = new HashMap<>();
 
-        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.TOP, "mTopGlow");
-        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.LEFT, "mLeftGlow");
-        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.RIGHT, "mRightGlow");
-        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, RecyclerView.class, Side.BOTTOM, "mBottomGlow");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, HorizontalScrollView.class, Side.LEFT, "mEdgeGlowLeft");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, HorizontalScrollView.class, Side.RIGHT, "mEdgeGlowRight");
 
         FIELD_MAP = Collections.unmodifiableMap(map);
     }
@@ -47,16 +46,22 @@ public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHo
     private final VistaEdgeEffectHelper mEdgeEffects;
 
 
-    public VistaRecyclerView(Context context) {
+    public VistaHorizontalScrollView(Context context) {
         this(context, null);
     }
 
-    public VistaRecyclerView(Context context, @Nullable AttributeSet attrs) {
+    public VistaHorizontalScrollView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public VistaRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public VistaHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public VistaHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
@@ -74,6 +79,6 @@ public class VistaRecyclerView extends RecyclerView implements VistaEdgeEffectHo
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges(FIELD_MAP, true);
+        mEdgeEffects.refreshEdges(FIELD_MAP, false);
     }
 }

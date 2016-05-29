@@ -26,14 +26,22 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import me.oriley.vista.VistaEdgeEffectHelper.Side;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class VistaListView extends ListView implements VistaEdgeEffectHost {
 
-    private static final String TOP_EDGE = "mEdgeGlowTop";
-    private static final String BOTTOM_EDGE = "mEdgeGlowBottom";
+    private static final Map<Side, Field> FIELD_MAP;
+
+    static {
+        Map<Side, Field> map = new HashMap<>();
+
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, AbsListView.class, Side.TOP, "mEdgeGlowTop");
+        VistaEdgeEffectHelper.addEdgeEffectFieldIfFound(map, AbsListView.class, Side.BOTTOM, "mEdgeGlowBottom");
+
+        FIELD_MAP = Collections.unmodifiableMap(map);
+    }
 
     @NonNull
     private final VistaEdgeEffectHelper mEdgeEffects;
@@ -49,24 +57,15 @@ public class VistaListView extends ListView implements VistaEdgeEffectHost {
 
     public VistaListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public VistaListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mEdgeEffects = new VistaEdgeEffectHelper(AbsListView.class, this, context, attrs);
+        mEdgeEffects = new VistaEdgeEffectHelper(this, context, attrs);
     }
 
-
-    @NonNull
-    @Override
-    public final List<VistaEdgeEffectModel> getEdgeEffectModels() {
-        List<VistaEdgeEffectModel> models = new ArrayList<>();
-        models.add(new VistaEdgeEffectModel(TOP_EDGE, Side.TOP, false));
-        models.add(new VistaEdgeEffectModel(BOTTOM_EDGE, Side.BOTTOM, false));
-        return models;
-    }
 
     @Override
     public void setEdgeEffectColors(@ColorInt int color) {
@@ -81,6 +80,6 @@ public class VistaListView extends ListView implements VistaEdgeEffectHost {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mEdgeEffects.refreshEdges();
+        mEdgeEffects.refreshEdges(FIELD_MAP, false);
     }
 }

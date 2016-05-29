@@ -20,6 +20,6 @@ allprojects {
         mavenLocal()
     }
 
-    group = 'me.oriley.vista'
+    group = 'com.github.oriley-me.vista'
     version = 'LOCAL-SNAPSHOT'
 }

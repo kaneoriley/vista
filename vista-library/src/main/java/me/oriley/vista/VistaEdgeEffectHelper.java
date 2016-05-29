@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2016 Kane O'Riley
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package me.oriley.vista;
 
 import android.content.Context;
@@ -10,24 +26,29 @@ import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public final class VistaEdgeEffectHelper {
 
-    public enum Side {
-        LEFT, RIGHT, TOP, BOTTOM
+    @Nullable
+    private static final Field EDGE_EFFECT_COMPAT_DELEGATE;
+
+    static {
+        EDGE_EFFECT_COMPAT_DELEGATE = getField(EdgeEffectCompat.class, "mEdgeEffect");
     }
 
     private static final String TAG = VistaEdgeEffectHelper.class.getSimpleName();
-    private static final String COMPAT_EDGE_EFFECT = "mEdgeEffect";
     private static final int INVALID = -1;
+    private static final float DEFAULT_THICKNESS_SCALE = 0.5f;
+    private static final float DEFAULT_EDGE_SCALE = 0.5f;
 
-    @NonNull
-    private final Class<? extends View> mViewClass;
+    public enum Side {
+        LEFT, RIGHT, TOP, BOTTOM
+    }
 
     @NonNull
     private final VistaEdgeEffectHost mHost;
@@ -37,25 +58,27 @@ public final class VistaEdgeEffectHelper {
 
     private final int mInitialGlowColour;
 
+    private final float mThicknessScale;
 
-    public VistaEdgeEffectHelper(@NonNull Class<? extends View> viewClass,
-                                 @NonNull VistaEdgeEffectHost customEdgeEffectHost,
+    private final float mEdgeScale;
+
+
+    public VistaEdgeEffectHelper(@NonNull VistaEdgeEffectHost customEdgeEffectHost,
                                  @NonNull Context context,
                                  @Nullable AttributeSet attrs) {
-        mViewClass = viewClass;
         mHost = customEdgeEffectHost;
-        mInitialGlowColour = readColorAttribute(context, attrs);
-    }
 
-
-    @ColorInt
-    private int readColorAttribute(@NonNull Context context, @Nullable AttributeSet attrs) {
         int initialColor = INVALID;
+        float thicknessScale = DEFAULT_THICKNESS_SCALE;
+        float edgeScale = DEFAULT_EDGE_SCALE;
+
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VistaView);
-            if (a.hasValue(R.styleable.VistaView_vistaEdgeEffectColor)) {
-                initialColor = a.getColor(R.styleable.VistaView_vistaEdgeEffectColor, INVALID);
+            if (a.hasValue(R.styleable.VistaView_vistaColor)) {
+                initialColor = a.getColor(R.styleable.VistaView_vistaColor, INVALID);
             }
+            thicknessScale = a.getFloat(R.styleable.VistaView_vistaThicknessScale, DEFAULT_THICKNESS_SCALE);
+            edgeScale = a.getFloat(R.styleable.VistaView_vistaEdgeScale, DEFAULT_EDGE_SCALE);
             a.recycle();
         }
 
@@ -67,73 +90,96 @@ public final class VistaEdgeEffectHelper {
             a.recycle();
         }
 
-        return initialColor;
+        mInitialGlowColour = initialColor;
+        mThicknessScale = thicknessScale;
+        mEdgeScale = edgeScale;
     }
 
-    public void refreshEdges() {
+
+    public void refreshEdges(@NonNull Map<Side, Field> fields, boolean isCompat) {
         Context context = mHost.getContext();
         mEdges.clear();
-        for (VistaEdgeEffectModel model : mHost.getEdgeEffectModels()) {
-            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context);
-            edgeEffect.setColor(mInitialGlowColour);
-            if (replaceEdgeEffect(context, model.fieldName, edgeEffect, model.isCompat)) {
-                mEdges.put(model.side, edgeEffect);
+        for (Map.Entry<Side, Field> entry : fields.entrySet()) {
+            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context, mInitialGlowColour, mThicknessScale, mEdgeScale);
+            if (replaceEdgeEffect(context, entry.getValue(), edgeEffect, isCompat)) {
+                mEdges.put(entry.getKey(), edgeEffect);
             }
         }
     }
 
     @CheckResult
     private boolean replaceEdgeEffect(@NonNull Context context,
-                                      @NonNull String fieldName,
+                                      @NonNull Field field,
                                       @NonNull VistaEdgeEffect edgeEffect,
                                       boolean isCompat) {
         if (isCompat) {
-            return replaceEdgeEffectCompat(context, fieldName, edgeEffect);
+            return replaceEdgeEffectCompat(context, field, edgeEffect);
         } else {
-            return replaceEdgeEffect(fieldName, edgeEffect);
+            return replaceEdgeEffect(field, edgeEffect);
         }
     }
 
     @CheckResult
     private boolean replaceEdgeEffectCompat(@NonNull Context context,
-                                            @NonNull String fieldName,
+                                            @NonNull Field field,
                                             @NonNull VistaEdgeEffect edgeEffect) {
+        if (EDGE_EFFECT_COMPAT_DELEGATE == null) {
+            Log.e(TAG, "Unable to find edge effect delegate field");
+            return false;
+        }
+
         try {
-            Field edgeEffectCompatField = mViewClass.getDeclaredField(fieldName);
-            edgeEffectCompatField.setAccessible(true);
-
             EdgeEffectCompat edgeEffectCompat = new EdgeEffectCompat(context);
-            Field edgeEffectField = EdgeEffectCompat.class.getDeclaredField(COMPAT_EDGE_EFFECT);
-            edgeEffectField.setAccessible(true);
-            edgeEffectField.set(edgeEffectCompat, edgeEffect);
+            EDGE_EFFECT_COMPAT_DELEGATE.set(edgeEffectCompat, edgeEffect);
 
-            edgeEffectCompatField.set(mHost, edgeEffectCompat);
-
+            field.set(mHost, edgeEffectCompat);
             edgeEffectCompat.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
-            Log.d(TAG, "Replaced edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
+            Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error replacing edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
+            Log.e(TAG, "Error replacing edge effect " + field + " in " + mHost);
             e.printStackTrace();
             return false;
         }
     }
 
     @CheckResult
-    private boolean replaceEdgeEffect(@NonNull String fieldName,
+    private boolean replaceEdgeEffect(@NonNull Field field,
                                       @NonNull VistaEdgeEffect edgeEffect) {
         try {
-            Field field = mViewClass.getDeclaredField(fieldName);
-            field.setAccessible(true);
             field.set(mHost, edgeEffect);
-
             edgeEffect.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
-            Log.d(TAG, "Replaced edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
+            Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error replacing edge effect " + fieldName + " in " + mViewClass + " for item " + mHost);
+            Log.e(TAG, "Error replacing edge effect " + field + " in " + mHost);
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static void addEdgeEffectFieldIfFound(@NonNull Map<Side, Field> map,
+                                                 @NonNull Class viewClass,
+                                                 @NonNull Side side,
+                                                 @NonNull String fieldName) {
+        Field edge = getField(viewClass, fieldName);
+        if (edge != null) {
+            map.put(side, edge);
+        }
+    }
+
+    @Nullable
+    private static Field getField(@NonNull Class<?> clazz, @NonNull String name) {
+        try {
+            Field field = clazz.getDeclaredField(name);
+            if (field == null) {
+                return null;
+            }
+            field.setAccessible(true);
+            return field;
+        } catch (Throwable e) {
+            Log.e(TAG, "Failed to get field " + name + " from class " + clazz.getCanonicalName(), e);
+            return null;
         }
     }
 

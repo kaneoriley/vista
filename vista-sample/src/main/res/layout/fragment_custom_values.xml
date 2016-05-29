@@ -8,4 +8,5 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         app:vistaColor="@color/md_purple_A200"
-        app:vistaThicknessScale="0.75"/>
+        app:vistaThicknessScale="4.0"
+        app:vistaEdgeScale="0.75"/>
