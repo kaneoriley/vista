@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_scroll_view:
                 openDrawerFragment(ScrollViewFragment.class, id);
                 break;
+            case R.id.nav_custom_values:
+                openDrawerFragment(CustomValuesFragment.class, id);
+                break;
         }
 
         closeDrawer();

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -75,14 +76,25 @@ class VistaEdgeEffect extends EdgeEffect {
     private float mDisplacement = 0.5f;
     private float mTargetDisplacement = 0.5f;
 
+    private final float mThicknessScale;
+
+    private final float mEdgeScale;
+
+    private int mWidth;
+    private int mHeight;
+
     /**
      * Construct a new EdgeEffect with a theme appropriate for the provided context.
      */
-    VistaEdgeEffect(@NonNull Context context) {
+    VistaEdgeEffect(@NonNull Context context, @ColorInt int color, float thicknessScale, float edgeScale) {
         super(context);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
         mInterpolator = new DecelerateInterpolator();
+
+        mPaint.setColor(color);
+        mThicknessScale = thicknessScale;
+        mEdgeScale = edgeScale;
     }
 
     /**
@@ -93,15 +105,20 @@ class VistaEdgeEffect extends EdgeEffect {
      */
     @Override
     public void setSize(int width, int height) {
-        final float r = width * 0.5f / SIN;
-        final float y = COS * r;
-        final float h = r - y;
-        final float or = height * 0.75f / SIN;
-        final float oy = COS * or;
-        final float oh = or - oy;
-        mRadius = r;
-        mBaseGlowScale = h > 0 ? Math.min(oh / h, 1.f) : 1.f;
-        mBounds.set(mBounds.left, mBounds.top, width, (int) Math.min(height, h));
+        if (width > 0 && height > 0 && (mWidth != width || mHeight != height)) {
+            mWidth = width;
+            mHeight = height;
+
+            final float r = width * mEdgeScale / SIN;
+            final float y = COS * r;
+            final float h = r - y;
+            final float or = height * mThicknessScale / SIN;
+            final float oy = COS * or;
+            final float oh = or - oy;
+            mRadius = r;
+            mBaseGlowScale = h > 0 ? oh / h : 1.f;
+            mBounds.set(mBounds.left, mBounds.top, width, (int) Math.min(height, h));
+        }
     }
 
     /**

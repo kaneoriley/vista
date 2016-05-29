@@ -5,6 +5,9 @@ Change Log
 
  *  Reduce amount of reflection required to speed up runtime performance
  *  Add support for HorizontalScrollView
+ *  Add support for custom thickness and edge scale factors
+
+ *  API Change: `vistaEdgeEffectColor` renamed to `vistaColor` to avoid repetition with all the new attributes.
 
 ## Version 0.3.1
 

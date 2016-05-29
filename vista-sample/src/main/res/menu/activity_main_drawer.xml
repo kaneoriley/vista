@@ -23,6 +23,9 @@
         <item
                 android:id="@+id/nav_scroll_view"
                 android:title="@string/navigation_drawer_scroll_view"/>
+        <item
+                android:id="@+id/nav_custom_values"
+                android:title="@string/navigation_drawer_custom_values"/>
     </group>
 
 </menu>

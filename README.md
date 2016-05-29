@@ -36,7 +36,18 @@ So, your XML will look something like this:
     ...
 ```
 
-To customise the edge effect colour, add the `vistaEdgeEffectColor` attribute like so:
+There are currently three custom attributes which are supported for all Vista views:
+
+`vistaColor`: Sets the color of the edge glow  
+
+`vistaThicknessScale`: A float scale factor to determine how 'thick' the edge glow effect should be. Stock Android uses
+0.75, but Vista defaults to 0.5 to suit the default arc size.  
+
+`vistaEdgeScale`: A float scale factor to determine how much of the view edge the glow effect should fill. Stock Android uses
+0.75, which results in the ends of the glow arc being clipped. Vista defaults to 0.5 so that the arc begins and ends at
+the corner of the encompassing view.  
+
+An example of these values in use is:
 
 ```xml
     ...
@@ -45,13 +56,15 @@ To customise the edge effect colour, add the `vistaEdgeEffectColor` attribute li
         android:id="@+id/vista_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:vistaEdgeEffectColor="@color/my_edge_effect_color"/>
+        app:vistaColor="#FFFF7E00"
+        app:vistaThicknessScale="4.0"
+        app:vistaEdgeScale="0.33"/>
 
     ...
 ```
 
-And that's it! You now have Material Design edge effect glows available to many more users, and don't have the ugly
-cut-off arc when your views aren't filling the available space.
+And that's it! You now have Material Design edge effect glows available to many more users, and don't have to have the
+ugly cut-off arc when your views aren't filling the available space.
 
 
 ## Gradle Dependency

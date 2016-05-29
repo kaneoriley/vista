@@ -4,7 +4,9 @@
     <!-- Styleables -->
 
     <declare-styleable name="VistaView">
-        <attr name="vistaEdgeEffectColor" format="color"/>
+        <attr name="vistaColor" format="color"/>
+        <attr name="vistaThicknessScale" format="float"/>
+        <attr name="vistaEdgeScale" format="float"/>
     </declare-styleable>
 
 </resources>

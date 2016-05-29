@@ -43,6 +43,8 @@ public final class VistaEdgeEffectHelper {
 
     private static final String TAG = VistaEdgeEffectHelper.class.getSimpleName();
     private static final int INVALID = -1;
+    private static final float DEFAULT_THICKNESS_SCALE = 0.5f;
+    private static final float DEFAULT_EDGE_SCALE = 0.5f;
 
     public enum Side {
         LEFT, RIGHT, TOP, BOTTOM
@@ -56,23 +58,27 @@ public final class VistaEdgeEffectHelper {
 
     private final int mInitialGlowColour;
 
+    private final float mThicknessScale;
+
+    private final float mEdgeScale;
+
 
     public VistaEdgeEffectHelper(@NonNull VistaEdgeEffectHost customEdgeEffectHost,
                                  @NonNull Context context,
                                  @Nullable AttributeSet attrs) {
         mHost = customEdgeEffectHost;
-        mInitialGlowColour = readColorAttribute(context, attrs);
-    }
 
-
-    @ColorInt
-    private int readColorAttribute(@NonNull Context context, @Nullable AttributeSet attrs) {
         int initialColor = INVALID;
+        float thicknessScale = DEFAULT_THICKNESS_SCALE;
+        float edgeScale = DEFAULT_EDGE_SCALE;
+
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VistaView);
-            if (a.hasValue(R.styleable.VistaView_vistaEdgeEffectColor)) {
-                initialColor = a.getColor(R.styleable.VistaView_vistaEdgeEffectColor, INVALID);
+            if (a.hasValue(R.styleable.VistaView_vistaColor)) {
+                initialColor = a.getColor(R.styleable.VistaView_vistaColor, INVALID);
             }
+            thicknessScale = a.getFloat(R.styleable.VistaView_vistaThicknessScale, DEFAULT_THICKNESS_SCALE);
+            edgeScale = a.getFloat(R.styleable.VistaView_vistaEdgeScale, DEFAULT_EDGE_SCALE);
             a.recycle();
         }
 
@@ -84,15 +90,17 @@ public final class VistaEdgeEffectHelper {
             a.recycle();
         }
 
-        return initialColor;
+        mInitialGlowColour = initialColor;
+        mThicknessScale = thicknessScale;
+        mEdgeScale = edgeScale;
     }
+
 
     public void refreshEdges(@NonNull Map<Side, Field> fields, boolean isCompat) {
         Context context = mHost.getContext();
         mEdges.clear();
         for (Map.Entry<Side, Field> entry : fields.entrySet()) {
-            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context);
-            edgeEffect.setColor(mInitialGlowColour);
+            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context, mInitialGlowColour, mThicknessScale, mEdgeScale);
             if (replaceEdgeEffect(context, entry.getValue(), edgeEffect, isCompat)) {
                 mEdges.put(entry.getKey(), edgeEffect);
             }
