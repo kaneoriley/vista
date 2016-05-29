@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-## Version 0.3.2 WIP
+## Version 0.4.0
 
  *  Reduce amount of reflection required to speed up runtime performance
  *  Add support for HorizontalScrollView
