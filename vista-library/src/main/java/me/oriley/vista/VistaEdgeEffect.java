@@ -59,7 +59,7 @@ class VistaEdgeEffect extends EdgeEffect {
     private float mGlowScaleYFinish;
     private long mStartTime;
     private float mDuration;
-    private final Interpolator mInterpolator;
+    private final Interpolator mInterpolator = new DecelerateInterpolator();
     private static final int STATE_IDLE = 0;
     private static final int STATE_PULL = 1;
     private static final int STATE_ABSORB = 2;
@@ -76,9 +76,8 @@ class VistaEdgeEffect extends EdgeEffect {
     private float mDisplacement = 0.5f;
     private float mTargetDisplacement = 0.5f;
 
-    private final float mThicknessScale;
-
-    private final float mEdgeScale;
+    private float mThicknessScale;
+    private float mEdgeScale;
 
     private int mWidth;
     private int mHeight;
@@ -90,11 +89,17 @@ class VistaEdgeEffect extends EdgeEffect {
         super(context);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
-        mInterpolator = new DecelerateInterpolator();
+        updateValues(color, thicknessScale, edgeScale);
+    }
 
+    void updateValues(@ColorInt int color, float thicknessScale, float edgeScale) {
         mPaint.setColor(color);
         mThicknessScale = thicknessScale;
         mEdgeScale = edgeScale;
+
+        if (mWidth > 0 && mHeight > 0) {
+            refresh();
+        }
     }
 
     /**
@@ -108,17 +113,20 @@ class VistaEdgeEffect extends EdgeEffect {
         if (width > 0 && height > 0 && (mWidth != width || mHeight != height)) {
             mWidth = width;
             mHeight = height;
-
-            final float r = width * mEdgeScale / SIN;
-            final float y = COS * r;
-            final float h = r - y;
-            final float or = height * mThicknessScale / SIN;
-            final float oy = COS * or;
-            final float oh = or - oy;
-            mRadius = r;
-            mBaseGlowScale = h > 0 ? oh / h : 1.f;
-            mBounds.set(mBounds.left, mBounds.top, width, (int) Math.min(height, h));
+            refresh();
         }
+    }
+
+    private void refresh() {
+        final float r = mWidth * mEdgeScale / SIN;
+        final float y = COS * r;
+        final float h = r - y;
+        final float or = mHeight * mThicknessScale / SIN;
+        final float oy = COS * or;
+        final float oh = or - oy;
+        mRadius = r;
+        mBaseGlowScale = h > 0 ? oh / h : 1.f;
+        mBounds.set(mBounds.left, mBounds.top, mWidth, (int) Math.min(mHeight, h));
     }
 
     /**

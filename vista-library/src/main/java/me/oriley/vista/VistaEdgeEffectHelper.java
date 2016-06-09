@@ -18,6 +18,7 @@ package me.oriley.vista;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -42,7 +43,6 @@ public final class VistaEdgeEffectHelper {
     }
 
     private static final String TAG = VistaEdgeEffectHelper.class.getSimpleName();
-    private static final int INVALID = -1;
     private static final float DEFAULT_THICKNESS_SCALE = 0.5f;
     private static final float DEFAULT_EDGE_SCALE = 0.5f;
 
@@ -56,11 +56,12 @@ public final class VistaEdgeEffectHelper {
     @NonNull
     private final HashMap<Side, VistaEdgeEffect> mEdges = new HashMap<>();
 
-    private final int mInitialGlowColour;
-
     private final float mThicknessScale;
 
     private final float mEdgeScale;
+
+    @ColorInt
+    private final int mInitialColor;
 
 
     public VistaEdgeEffectHelper(@NonNull VistaEdgeEffectHost customEdgeEffectHost,
@@ -68,14 +69,17 @@ public final class VistaEdgeEffectHelper {
                                  @Nullable AttributeSet attrs) {
         mHost = customEdgeEffectHost;
 
-        int initialColor = INVALID;
         float thicknessScale = DEFAULT_THICKNESS_SCALE;
         float edgeScale = DEFAULT_EDGE_SCALE;
+
+        boolean customColor = false;
+        int initialColor = Color.WHITE;
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VistaView);
             if (a.hasValue(R.styleable.VistaView_vistaColor)) {
-                initialColor = a.getColor(R.styleable.VistaView_vistaColor, INVALID);
+                customColor = true;
+                initialColor = a.getColor(R.styleable.VistaView_vistaColor, initialColor);
             }
             thicknessScale = a.getFloat(R.styleable.VistaView_vistaThicknessScale, DEFAULT_THICKNESS_SCALE);
             edgeScale = a.getFloat(R.styleable.VistaView_vistaEdgeScale, DEFAULT_EDGE_SCALE);
@@ -83,14 +87,14 @@ public final class VistaEdgeEffectHelper {
         }
 
         // Couldn't get from attribute, try app compat accent color
-        if (initialColor == INVALID) {
+        if (!customColor) {
             TypedValue typedValue = new TypedValue();
             TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
-            initialColor = a.getColor(0, 0);
+            initialColor = a.getColor(0, Color.WHITE);
             a.recycle();
         }
 
-        mInitialGlowColour = initialColor;
+        mInitialColor = initialColor;
         mThicknessScale = thicknessScale;
         mEdgeScale = edgeScale;
     }
@@ -98,9 +102,12 @@ public final class VistaEdgeEffectHelper {
 
     public void refreshEdges(@NonNull Map<Side, Field> fields, boolean isCompat) {
         Context context = mHost.getContext();
-        mEdges.clear();
         for (Map.Entry<Side, Field> entry : fields.entrySet()) {
-            VistaEdgeEffect edgeEffect = new VistaEdgeEffect(context, mInitialGlowColour, mThicknessScale, mEdgeScale);
+            VistaEdgeEffect edgeEffect = mEdges.get(entry.getKey());
+            if (edgeEffect == null) {
+                edgeEffect = new VistaEdgeEffect(context, mInitialColor, mThicknessScale, mEdgeScale);
+            }
+
             if (replaceEdgeEffect(context, entry.getValue(), edgeEffect, isCompat)) {
                 mEdges.put(entry.getKey(), edgeEffect);
             }
@@ -184,10 +191,8 @@ public final class VistaEdgeEffectHelper {
     }
 
     public void setEdgeEffectColors(@ColorInt int color) {
-        for (VistaEdgeEffect edgeEffect : mEdges.values()) {
-            if (edgeEffect != null) {
-                edgeEffect.setColor(color);
-            }
+        for (Side side : Side.values()) {
+            setEdgeEffectColor(side, color);
         }
     }
 
