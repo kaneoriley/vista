@@ -12,12 +12,6 @@
                 android:id="@+id/nav_nested_scroll_view"
                 android:title="@string/navigation_drawer_nested_scroll_view"/>
         <item
-                android:id="@+id/nav_list_view"
-                android:title="@string/navigation_drawer_list_view"/>
-        <item
-                android:id="@+id/nav_grid_view"
-                android:title="@string/navigation_drawer_grid_view"/>
-        <item
                 android:id="@+id/nav_horizontal_scroll_view"
                 android:title="@string/navigation_drawer_horizontal_scroll_view"/>
         <item

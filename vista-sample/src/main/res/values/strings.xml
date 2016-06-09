@@ -7,9 +7,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="navigation_drawer_grid_view">GridView</string>
     <string name="navigation_drawer_horizontal_scroll_view">HorizontalScrollView</string>
-    <string name="navigation_drawer_list_view">ListView</string>
     <string name="navigation_drawer_scroll_view">ScrollView</string>
     <string name="navigation_drawer_recycler_view">RecyclerView</string>
     <string name="navigation_drawer_nested_scroll_view">NestedScrollView</string>

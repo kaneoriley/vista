@@ -18,8 +18,6 @@ Vista supports 6 view types. You need to replace the view in your layout XML wit
 order to see the new edge effects. The following are the names of the supported types, and their corresponding Vista
 counterparts:
 
-`android.widget.GridView`: Replace with `me.oriley.vista.VistaGridView`  
-`android.widget.ListView`: Replace with `me.oriley.vista.VistaListView`  
 `android.widget.HorizontalScrollView`: Replace with `me.oriley.vista.VistaHorizontalScrollView`  
 `android.widget.ScrollView`: Replace with `me.oriley.vista.VistaScrollView`  
 `android.support.v4.view.ViewPager`: Replace with `me.oriley.vista.VistaViewPager`  
