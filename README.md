@@ -63,7 +63,8 @@ An example of these values in use is:
         android:layout_height="match_parent"
         app:vistaColor="#FFFF7E00"
         app:vistaThicknessScale="4.0"
-        app:vistaEdgeScale="0.33"/>
+        app:vistaEdgeScale="0.33"
+        app:vistaDisableHotspot="true"/>
 
     ...
 ```
