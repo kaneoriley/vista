@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.HorizontalScrollView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,12 +102,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_nested_scroll_view:
                 openDrawerFragment(NestedScrollViewFragment.class, id);
-                break;
-            case R.id.nav_list_view:
-                openDrawerFragment(ListViewFragment.class, id);
-                break;
-            case R.id.nav_grid_view:
-                openDrawerFragment(GridViewFragment.class, id);
                 break;
             case R.id.nav_horizontal_scroll_view:
                 openDrawerFragment(HorizontalScrollViewFragment.class, id);

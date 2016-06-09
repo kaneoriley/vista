@@ -1,7 +1,17 @@
 Change Log
 ==========
 
+## Version 0.4.1
+
+_2016-06-09_
+
+ *  Fix runtime changes to edge effect colors
+ *  Add support for disabling hotspot tracking on Lollipop and above
+ *  Remove ListView/GridView support, as it is broken on pre Lollipop and replaceable with RecyclerView anyway
+
 ## Version 0.4.0
+
+_2016-06-01_
 
  *  Reduce amount of reflection required to speed up runtime performance
  *  Add support for HorizontalScrollView

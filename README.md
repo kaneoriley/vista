@@ -18,8 +18,6 @@ Vista supports 6 view types. You need to replace the view in your layout XML wit
 order to see the new edge effects. The following are the names of the supported types, and their corresponding Vista
 counterparts:
 
-`android.widget.GridView`: Replace with `me.oriley.vista.VistaGridView`  
-`android.widget.ListView`: Replace with `me.oriley.vista.VistaListView`  
 `android.widget.HorizontalScrollView`: Replace with `me.oriley.vista.VistaHorizontalScrollView`  
 `android.widget.ScrollView`: Replace with `me.oriley.vista.VistaScrollView`  
 `android.support.v4.view.ViewPager`: Replace with `me.oriley.vista.VistaViewPager`  
@@ -39,7 +37,7 @@ So, your XML will look something like this:
     ...
 ```
 
-There are currently three custom attributes which are supported for all Vista views:
+There are currently four custom attributes which are supported for all Vista views:
 
 `vistaColor`: Sets the color of the edge glow  
 
@@ -49,6 +47,10 @@ There are currently three custom attributes which are supported for all Vista vi
 `vistaEdgeScale`: A float scale factor to determine how much of the view edge the glow effect should fill. Stock Android uses
 0.75, which results in the ends of the glow arc being clipped. Vista defaults to 0.5 so that the arc begins and ends at
 the corner of the encompassing view.  
+
+`vistaDisableHotspot`: On versions of Android prior to Lollipop, the edge effect will always be centered along the edge
+of the view, rather than tracking finger movement. Set this attribute to true if you would like this behaviour to be
+used on Lollipop and newer devices as well.
 
 An example of these values in use is:
 
@@ -61,7 +63,8 @@ An example of these values in use is:
         android:layout_height="match_parent"
         app:vistaColor="#FFFF7E00"
         app:vistaThicknessScale="4.0"
-        app:vistaEdgeScale="0.33"/>
+        app:vistaEdgeScale="0.33"
+        app:vistaDisableHotspot="true"/>
 
     ...
 ```
@@ -85,7 +88,7 @@ repositories {
 
 ```gradle
 dependencies {
-    compile 'com.github.oriley-me:vista:0.4.0'
+    compile 'com.github.oriley-me:vista:0.4.1'
 }
 ```
 

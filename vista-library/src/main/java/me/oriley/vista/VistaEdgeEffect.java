@@ -59,7 +59,7 @@ class VistaEdgeEffect extends EdgeEffect {
     private float mGlowScaleYFinish;
     private long mStartTime;
     private float mDuration;
-    private final Interpolator mInterpolator;
+    private final Interpolator mInterpolator = new DecelerateInterpolator();
     private static final int STATE_IDLE = 0;
     private static final int STATE_PULL = 1;
     private static final int STATE_ABSORB = 2;
@@ -76,9 +76,9 @@ class VistaEdgeEffect extends EdgeEffect {
     private float mDisplacement = 0.5f;
     private float mTargetDisplacement = 0.5f;
 
-    private final float mThicknessScale;
-
-    private final float mEdgeScale;
+    private float mThicknessScale;
+    private float mEdgeScale;
+    private boolean mDisableHotspot;
 
     private int mWidth;
     private int mHeight;
@@ -86,15 +86,21 @@ class VistaEdgeEffect extends EdgeEffect {
     /**
      * Construct a new EdgeEffect with a theme appropriate for the provided context.
      */
-    VistaEdgeEffect(@NonNull Context context, @ColorInt int color, float thicknessScale, float edgeScale) {
+    VistaEdgeEffect(@NonNull Context context) {
         super(context);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
-        mInterpolator = new DecelerateInterpolator();
+    }
 
+    void updateValues(@ColorInt int color, float thicknessScale, float edgeScale, boolean disableHotspot) {
         mPaint.setColor(color);
         mThicknessScale = thicknessScale;
         mEdgeScale = edgeScale;
+        mDisableHotspot = disableHotspot;
+
+        if (mWidth > 0 && mHeight > 0) {
+            refresh();
+        }
     }
 
     /**
@@ -108,17 +114,20 @@ class VistaEdgeEffect extends EdgeEffect {
         if (width > 0 && height > 0 && (mWidth != width || mHeight != height)) {
             mWidth = width;
             mHeight = height;
-
-            final float r = width * mEdgeScale / SIN;
-            final float y = COS * r;
-            final float h = r - y;
-            final float or = height * mThicknessScale / SIN;
-            final float oy = COS * or;
-            final float oh = or - oy;
-            mRadius = r;
-            mBaseGlowScale = h > 0 ? oh / h : 1.f;
-            mBounds.set(mBounds.left, mBounds.top, width, (int) Math.min(height, h));
+            refresh();
         }
+    }
+
+    private void refresh() {
+        final float r = mWidth * mEdgeScale / SIN;
+        final float y = COS * r;
+        final float h = r - y;
+        final float or = mHeight * mThicknessScale / SIN;
+        final float oy = COS * or;
+        final float oh = or - oy;
+        mRadius = r;
+        mBaseGlowScale = h > 0 ? oh / h : 1.f;
+        mBounds.set(mBounds.left, mBounds.top, mWidth, (int) Math.min(mHeight, h));
     }
 
     /**
@@ -175,6 +184,10 @@ class VistaEdgeEffect extends EdgeEffect {
      */
     @Override
     public void onPull(float deltaDistance, float displacement) {
+        if (mDisableHotspot) {
+            displacement = 0.5f;
+        }
+
         final long now = AnimationUtils.currentAnimationTimeMillis();
         mTargetDisplacement = displacement;
         if (mState == STATE_PULL_DECAY && now - mStartTime < mDuration) {
