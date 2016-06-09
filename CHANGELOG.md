@@ -6,7 +6,7 @@ Change Log
 _2016-06-09_
 
  *  Fix runtime changes to edge effect colors
- *
+ *  Add support for disabling hotspot tracking on Lollipop and above
 
 ## Version 0.4.0
 

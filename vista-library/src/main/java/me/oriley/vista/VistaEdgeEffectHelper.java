@@ -63,6 +63,8 @@ public final class VistaEdgeEffectHelper {
     @ColorInt
     private final int mInitialColor;
 
+    private final boolean mDisableHotspot;
+
 
     public VistaEdgeEffectHelper(@NonNull VistaEdgeEffectHost customEdgeEffectHost,
                                  @NonNull Context context,
@@ -71,6 +73,7 @@ public final class VistaEdgeEffectHelper {
 
         float thicknessScale = DEFAULT_THICKNESS_SCALE;
         float edgeScale = DEFAULT_EDGE_SCALE;
+        boolean disableHotspot = false;
 
         boolean customColor = false;
         int initialColor = Color.WHITE;
@@ -81,6 +84,7 @@ public final class VistaEdgeEffectHelper {
                 customColor = true;
                 initialColor = a.getColor(R.styleable.VistaView_vistaColor, initialColor);
             }
+            disableHotspot = a.getBoolean(R.styleable.VistaView_vistaDisableHotspot, false);
             thicknessScale = a.getFloat(R.styleable.VistaView_vistaThicknessScale, DEFAULT_THICKNESS_SCALE);
             edgeScale = a.getFloat(R.styleable.VistaView_vistaEdgeScale, DEFAULT_EDGE_SCALE);
             a.recycle();
@@ -95,6 +99,7 @@ public final class VistaEdgeEffectHelper {
         }
 
         mInitialColor = initialColor;
+        mDisableHotspot = disableHotspot;
         mThicknessScale = thicknessScale;
         mEdgeScale = edgeScale;
     }
@@ -105,7 +110,8 @@ public final class VistaEdgeEffectHelper {
         for (Map.Entry<Side, Field> entry : fields.entrySet()) {
             VistaEdgeEffect edgeEffect = mEdges.get(entry.getKey());
             if (edgeEffect == null) {
-                edgeEffect = new VistaEdgeEffect(context, mInitialColor, mThicknessScale, mEdgeScale);
+                edgeEffect = new VistaEdgeEffect(context);
+                edgeEffect.updateValues(mInitialColor, mThicknessScale, mEdgeScale, mDisableHotspot);
             }
 
             if (replaceEdgeEffect(context, entry.getValue(), edgeEffect, isCompat)) {

@@ -39,7 +39,7 @@ So, your XML will look something like this:
     ...
 ```
 
-There are currently three custom attributes which are supported for all Vista views:
+There are currently four custom attributes which are supported for all Vista views:
 
 `vistaColor`: Sets the color of the edge glow  
 
@@ -49,6 +49,10 @@ There are currently three custom attributes which are supported for all Vista vi
 `vistaEdgeScale`: A float scale factor to determine how much of the view edge the glow effect should fill. Stock Android uses
 0.75, which results in the ends of the glow arc being clipped. Vista defaults to 0.5 so that the arc begins and ends at
 the corner of the encompassing view.  
+
+`vistaDisableHotspot`: On versions of Android prior to Lollipop, the edge effect will always be centered along the edge
+of the view, rather than tracking finger movement. Set this attribute to true if you would like this behaviour to be
+used on Lollipop and newer devices as well.
 
 An example of these values in use is:
 

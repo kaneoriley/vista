@@ -78,6 +78,7 @@ class VistaEdgeEffect extends EdgeEffect {
 
     private float mThicknessScale;
     private float mEdgeScale;
+    private boolean mDisableHotspot;
 
     private int mWidth;
     private int mHeight;
@@ -85,17 +86,17 @@ class VistaEdgeEffect extends EdgeEffect {
     /**
      * Construct a new EdgeEffect with a theme appropriate for the provided context.
      */
-    VistaEdgeEffect(@NonNull Context context, @ColorInt int color, float thicknessScale, float edgeScale) {
+    VistaEdgeEffect(@NonNull Context context) {
         super(context);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
-        updateValues(color, thicknessScale, edgeScale);
     }
 
-    void updateValues(@ColorInt int color, float thicknessScale, float edgeScale) {
+    void updateValues(@ColorInt int color, float thicknessScale, float edgeScale, boolean disableHotspot) {
         mPaint.setColor(color);
         mThicknessScale = thicknessScale;
         mEdgeScale = edgeScale;
+        mDisableHotspot = disableHotspot;
 
         if (mWidth > 0 && mHeight > 0) {
             refresh();
@@ -183,6 +184,10 @@ class VistaEdgeEffect extends EdgeEffect {
      */
     @Override
     public void onPull(float deltaDistance, float displacement) {
+        if (mDisableHotspot) {
+            displacement = 0.5f;
+        }
+
         final long now = AnimationUtils.currentAnimationTimeMillis();
         mTargetDisplacement = displacement;
         if (mState == STATE_PULL_DECAY && now - mStartTime < mDuration) {
