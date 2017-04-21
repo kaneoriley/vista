@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+## Version 0.4.2
+
+_2017-04-21_
+
+ *  Update dependencies
+ *  Hide debug log spew by default
+
 ## Version 0.4.1
 
 _2016-06-09_
