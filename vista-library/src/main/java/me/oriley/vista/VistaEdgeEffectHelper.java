@@ -147,7 +147,7 @@ public final class VistaEdgeEffectHelper {
 
             field.set(mHost, edgeEffectCompat);
             edgeEffectCompat.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
-            Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
+            if (Vista.sDebug) Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error replacing edge effect " + field + " in " + mHost);
@@ -162,7 +162,7 @@ public final class VistaEdgeEffectHelper {
         try {
             field.set(mHost, edgeEffect);
             edgeEffect.setSize(mHost.getMeasuredWidth(), mHost.getMeasuredHeight());
-            Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
+            if (Vista.sDebug) Log.d(TAG, "Replaced edge effect " + field + " in " + mHost);
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error replacing edge effect " + field + " in " + mHost);
